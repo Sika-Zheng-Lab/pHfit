@@ -68,6 +68,7 @@ class TestCLI:
         assert os.path.exists(os.path.join(output_dir, "standard_curve.pdf"))
         assert os.path.exists(os.path.join(output_dir, "standard_curve.png"))
         assert os.path.exists(os.path.join(output_dir, "estimated_pH.tsv"))
+        assert os.path.exists(os.path.join(output_dir, "estimated_pH_all.tsv"))
         assert os.path.exists(os.path.join(output_dir, "sample_estimates.pdf"))
         assert os.path.exists(os.path.join(output_dir, "sample_estimates.png"))
         assert os.path.exists(os.path.join(output_dir, "report.html"))
@@ -81,6 +82,13 @@ class TestCLI:
         results_df = pd.read_csv(os.path.join(output_dir, "estimated_pH.tsv"), sep="\t")
         assert len(results_df) == 3
         assert "estimated_pH" in results_df.columns
+
+        # Check per-replicate estimated pH
+        all_df = pd.read_csv(os.path.join(output_dir, "estimated_pH_all.tsv"), sep="\t")
+        assert len(all_df) == 9  # 3 samples × 3 replicates
+        assert "sample" in all_df.columns
+        assert "value" in all_df.columns
+        assert "estimated_pH" in all_df.columns
 
         # Check HTML report
         with open(os.path.join(output_dir, "report.html")) as f:

@@ -214,7 +214,7 @@ def main(argv=None):
         sample_df = read_samples(args.sample)
         logger.info("  %d samples (%d total measurements)", len(sample_df), int(sample_df["n"].sum()))
 
-        # Estimate pH for each sample
+        # Estimate pH for each sample (aggregated means)
         estimated_pH = []
         for _, row in sample_df.iterrows():
             pH = estimate_pH(row["mean"], params["y_min"], params["y_max"], params["pKa"], params["n"])
@@ -227,10 +227,22 @@ def main(argv=None):
             pH_str = f"{row['estimated_pH']:.4f}" if not (row["estimated_pH"] != row["estimated_pH"]) else "NaN (out of range)"
             logger.info("  %s: %s", row["sample"], pH_str)
 
-        # Write results
+        # Write aggregated results
         results_path = os.path.join(args.output, "estimated_pH.tsv")
         write_results(sample_df, results_path)
         logger.info("Results saved: %s", results_path)
+
+        # Estimate pH for each individual replicate and write to separate file
+        import pandas as _pd
+        raw_sample_df = _pd.read_csv(args.sample, sep="\t")
+        raw_estimated = []
+        for _, row in raw_sample_df.iterrows():
+            pH = estimate_pH(row["value"], params["y_min"], params["y_max"], params["pKa"], params["n"])
+            raw_estimated.append(pH)
+        raw_sample_df["estimated_pH"] = raw_estimated
+        raw_results_path = os.path.join(args.output, "estimated_pH_all.tsv")
+        raw_sample_df.to_csv(raw_results_path, sep="\t", index=False, float_format="%.6f")
+        logger.info("Per-replicate results saved: %s", raw_results_path)
 
         # Plot sample estimates
         plot_sample_estimates(standard_df, sample_df, params, args.output, dpi=args.dpi)

@@ -161,7 +161,8 @@ sampleB	525.3
 | `fit_params.tsv` | Fitted parameters (y_min, y_max, pKa, n, R²) |
 | `standard_curve.pdf` | Standard curve plot (PDF) |
 | `standard_curve.png` | Standard curve plot (PNG) |
-| `estimated_pH.tsv` | Estimated pH for each sample |
+| `estimated_pH.tsv` | Estimated pH for each sample (averaged) |
+| `estimated_pH_all.tsv` | Estimated pH for each individual replicate |
 | `sample_estimates.pdf` | Sample estimates plot (PDF) |
 | `sample_estimates.png` | Sample estimates plot (PNG) |
 | `report.html` | Self-contained HTML report with interactive plots |
