@@ -26,5 +26,4 @@ env/
 Thumbs.db
 
 # Test outputs
-output/
 tests/output/

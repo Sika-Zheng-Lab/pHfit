@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>pHfit Report</title>
+<script src="https://cdn.plot.ly/plotly-2.35.2.min.js" charset="utf-8"></script>
+<style>
+  :root {
+    --primary: #2563eb;
+    --accent: #dc2626;
+    --bg: #f8fafc;
+    --card-bg: #ffffff;
+    --border: #e2e8f0;
+    --text: #1e293b;
+    --text-secondary: #64748b;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding: 2rem;
+    max-width: 960px;
+    margin: 0 auto;
+  }
+  h1 {
+    font-size: 1.8rem;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+    border-bottom: 3px solid var(--primary);
+    padding-bottom: 0.5rem;
+  }
+  h2 {
+    font-size: 1.3rem;
+    color: var(--text);
+    margin: 2rem 0 0.8rem 0;
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .meta {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+  }
+  .meta span {
+    display: inline-block;
+    margin-right: 1.5rem;
+  }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  th, td {
+    padding: 0.5rem 0.8rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    background: #f1f5f9;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #f8fafc; }
+  .plot-container {
+    margin: 1rem 0;
+  }
+  .equation {
+    background: #f1f5f9;
+    border-left: 4px solid var(--primary);
+    padding: 0.8rem 1.2rem;
+    font-family: "Courier New", monospace;
+    font-size: 0.95rem;
+    margin: 1rem 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .footer {
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+  .badge {
+    display: inline-block;
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .badge-fixed {
+    background: #dbeafe;
+    color: #1d4ed8;
+  }
+  .badge-fitted {
+    background: #dcfce7;
+    color: #16a34a;
+  }
+  .warn {
+    color: #d97706;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<h1>pHfit Report</h1>
+<div class="meta">
+  <span>Generated: 2026-02-19 14:10:13</span>
+  <span>pHfit v0.1.0</span>
+  <span>Preset: <strong>Oregon Green 488</strong></span>
+</div>
+
+<h2>Fit Parameters</h2>
+<div class="card">
+  <table>
+    <thead>
+      <tr><th>Parameter</th><th>Value</th><th>Status</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>y_min</td><td>127.580180</td><td><span class="badge badge-fitted">fitted</span></td></tr><tr><td>y_max</td><td>870.341010</td><td><span class="badge badge-fitted">fitted</span></td></tr><tr><td>pKa</td><td>4.700000</td><td><span class="badge badge-fixed">fixed</span></td></tr><tr><td>n (Hill coefficient)</td><td>1.000000</td><td><span class="badge badge-fixed">fixed</span></td></tr><tr><td>R²</td><td>0.989455</td><td></td></tr><tr><td>Direction</td><td>↑ ascending</td><td></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="equation">
+  F(pH) = y_min + (y_max - y_min) / (1 + 10<sup>n·(pKa - pH)</sup>)
+</div>
+
+<h2>Standard Curve</h2>
+<div class="card">
+  <div class="plot-container">
+    <div>                            <div id="standard-curve" class="plotly-graph-div" style="height:450px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("standard-curve")) {                    Plotly.newPlot(                        "standard-curve",                        [{"hovertemplate":"pH: %{x:.2f}\u003cbr\u003eSignal: %{y:.2f}\u003cextra\u003eFitted\u003c\u002fextra\u003e","line":{"color":"#dc2626","width":2.5},"mode":"lines","name":"Fitted sigmoid","x":{"dtype":"f8","bdata":"AAAAAAAABEAJP7kQdTMEQBJ+ciHqZgRAG70rMl+aBEAk\u002fORC1M0EQC07nlNJAQVANnpXZL40BUA\u002fuRB1M2gFQEj4yYWomwVAUTeDlh3PBUBadjynkgIGQGO19bcHNgZAbPSuyHxpBkB1M2jZ8ZwGQH5yIepm0AZAh7Ha+tsDB0CQ8JMLUTcHQJkvTRzGagdAom4GLTueB0Crrb89sNEHQLTseE4lBQhAvSsyX5o4CEDGautvD2wIQM+ppICEnwhA2OhdkfnSCEDhJxeibgYJQOpm0LLjOQlA86WJw1htCUD85ELUzaAJQAUk\u002fORC1AlADmO19bcHCkAXom4GLTsKQCDhJxeibgpAKSDhJxeiCkAyX5o4jNUKQDueU0kBCQtARN0MWnY8C0BNHMZq628LQFZbf3tgowtAX5o4jNXWC0Bo2fGcSgoMQHIYq62\u002fPQxAeldkvjRxDECElh3PqaQMQIzV1t8e2AxAlhSQ8JMLDUCeU0kBCT8NQKiSAhJ+cg1AsNG7IvOlDUC6EHUzaNkNQMJPLkTdDA5AzI7nVFJADkDUzaBlx3MOQN4MWnY8pw5A5ksTh7HaDkDwisyXJg4PQPjJhaibQQ9AAgk\u002fuRB1D0AKSPjJhagPQBSHsdr62w9ADmO19bcHEECTAhJ+ciEQQBeibgYtOxBAnEHLjudUEEAg4ScXom4QQKWAhJ9ciBBAKSDhJxeiEECuvz2w0bsQQDJfmjiM1RBAt\u002f72wEbvEEA7nlNJAQkRQMA9sNG7IhFARN0MWnY8EUDJfGniMFYRQE0cxmrrbxFA0rsi86WJEUBWW397YKMRQNv62wMbvRFAX5o4jNXWEUDkOZUUkPARQGjZ8ZxKChJA7XhOJQUkEkByGKutvz0SQPa3BzZ6VxJAeldkvjRxEkD\u002f9sBG74oSQISWHc+ppBJACDZ6V2S+EkCM1dbfHtgSQBF1M2jZ8RJAlhSQ8JMLE0AatOx4TiUTQJ5TSQEJPxNAI\u002fOlicNYE0CokgISfnITQCwyX5o4jBNAsNG7IvOlE0A1cRirrb8TQLoQdTNo2RNAPrDRuyLzE0DCTy5E3QwUQEfvisyXJhRAzI7nVFJAFEBQLkTdDFoUQNTNoGXHcxRAWW397YGNFEDeDFp2PKcUQGKstv72wBRA5ksTh7HaFEBr628PbPQUQPCKzJcmDhVAdCopIOEnFUD4yYWom0EVQH1p4jBWWxVAAgk\u002fuRB1FUCGqJtBy44VQApI+MmFqBVAj+dUUkDCFUAUh7Ha+tsVQJgmDmO19RVAHMZq628PFkChZcdzKikWQCYFJPzkQhZAqqSAhJ9cFkAuRN0MWnYWQLPjOZUUkBZAOIOWHc+pFkC8IvOlicMWQEDCTy5E3RZAxWGstv72FkBKAQk\u002fuRAXQM6gZcdzKhdAUkDCTy5EF0DX3x7Y6F0XQFx\u002fe2CjdxdA4B7Y6F2RF0BkvjRxGKsXQOldkfnSxBdAbv3tgY3eF0DynEoKSPgXQHY8p5ICEhhA+9sDG70rGECAe2Cjd0UYQAQbvSsyXxhAiLoZtOx4GEANWnY8p5IYQJL50sRhrBhAFpkvTRzGGECaOIzV1t8YQB\u002fY6F2R+RhApHdF5ksTGUAoF6JuBi0ZQKy2\u002fvbARhlAMVZbf3tgGUC29bcHNnoZQDqVFJDwkxlAvjRxGKutGUBD1M2gZccZQMhzKikg4RlATBOHsdr6GUDRsuM5lRQaQFVSQMJPLhpA2vGcSgpIGkBekfnSxGEaQOMwVlt\u002fexpAZ9Cy4zmVGkDsbw9s9K4aQHAPbPSuyBpA9a7IfGniGkB5TiUFJPwaQP7tgY3eFRtAgo3eFZkvG0AHLTueU0kbQIvMlyYOYxtAEGz0rsh8G0CUC1E3g5YbQBmrrb89sBtAnUoKSPjJG0Ai6mbQsuMbQKaJw1ht\u002fRtAKykg4ScXHECvyHxp4jAcQDRo2fGcShxAuAc2eldkHEA9p5ICEn4cQMFG74rMlxxARuZLE4exHEDKhaibQcscQE8lBST85BxA08RhrLb+HEBYZL40cRgdQNwDG70rMh1AYaN3ReZLHUDlQtTNoGUdQGriMFZbfx1A7oGN3hWZHUBzIepm0LIdQPfARu+KzB1AfGCjd0XmHUAAAAAAAAAeQA=="},"y":{"dtype":"f8","bdata":"fVeE9JeHYEA3HhcnaZBgQKXqhvO+mWBAJiaOBqGjYEA4cQl7F65gQMhHtN8quWBAfFQkPeTEYECUVQQcTdFgQEszj4tv3mBASJhLKFbsYED6\u002fwcjDPtgQLLCFkidCmFAECrJBhYbYUC6CCh5gyxhQG+r52vzPmFADT6UZnRSYUBY6vKzFWdhQPUFk2rnfGFAu5aJdfqTYUB9RVCdYKxhQA6Fv5AsxmFAHjsa7nHhYUBZlx9MRf5hQNr4FUO8HGJAhMe\u002fde08YkD3+yia8F5iQIWzOYLegmJAsJv3I9GoYkCPOV2h49BiQNETq08y+2JAgpITvtonY0Av\u002f567+1ZjQCZ1IVy1iGNAyccY\u002fCi9Y0CrckRDefRjQAKTxSXKLmRAOb+Q40BsZECCW\u002fcFBK1kQEvaCVs78WRArD+Q7g85ZUDiVlIArIRlQO1rZfc61GVAjigyUuknZkBckOKS5H9mQHYr5idb3GZAKWo5UHw9Z0BhXh37d6NnQPtL7qJ+DmhAOn\u002fKIsF+aECfkr+GcPRoQNAPO9a9b2lAdGeE2NnwaUB41BHT9HdqQHghmEE+BWtALaLGh+SYa0CPOLWcFDNsQPYEIrD502xAxHy3ybx7bUDWA7JihCpuQM6rXfpz4G5AUiAJpqudb0D205jOIzFwQIV1auEvl3BA95p\u002flgMBcUDFnuvVpW5xQCQHyaga4HFA\u002fbtw\u002fmJVckAG2clzfM5yQIJLnR1hS3NAORnlVgfMc0AP6xeUYVB0QF+AdTxe2HRAtUtXiudjdUAbCYFz4\u002fJ1QGIbX5ozhXZAQZgLSbUad0C0+9Z2QbN3QKCi7tisTnhAF8SR\u002fsfseEB\u002fUhZ5X415QArhyg88MHpAx5OK\u002fyLVekCfqJ1F1nt7QLDxRfUUJHxAfWIcl5vNfED6bi2RJHh9QDE+j5ZoI35AxVEAHR\u002fPfkBJzvjW\u002fnp\u002fQJupPhhfE4BAOKV45glpgEDDMhCCW76AQMLuXS4wE4FAeeVLAWVngUCPfYcb2LqBQM6IC91oDYJA5iJdFfhegkCdDu8uaK+CQL63OlWd\u002foJAU\u002fw6lX1Mg0DjdxL48JiDQJFdxJfh44NAgCgDrjsthECH0jKd7XSEQHo81PPnuoRAmYakah3\u002fhEC07MzdgkGFQAgcjkEPgoVAItjckrvAhUCmLG3Egv2FQMeErahhOIZAwws02VZxhkCHAx+cYqiGQN+i5MeG3YZAGe0IpsYQh0DTNijVJkKHQEERvCqtcYdAan72lGCfh0AA9AT9SMuHQCQfAipv9YdADdXSpNwdiEACXiCdm0SIQFd\u002fmM+2aYhAO3uSbTmNiEDBxC8GL6+IQBR1B3Gjz4hA7K5kuqLuiEB1ERoROQyJQA4i57VyKIlAWSVo7FtDiUC\u002fMYXtAF2JQFlKUtttdYlAz\u002fpPtq6MiUAiK\u002fpTz6KJQCSlkVbbt4lA5fwLJt7LiUA9KRXq4t6JQJkLDoX08IlA3F\u002fzjx0CikDNARlXaBKKQJQZptfeIYpAoIm\u002fvYowikDR3E5jdT6KQBHsVM+nS4pA+Xa4tSpYikAl94F3BmSKQAIDdyNDb4pAP6AId+h5ikDr64jf\u002fYOKQOV7nXuKjYpAEdHkHJWWikDyGcZJJJ+KQPlgYz8+p4pARBCn8+iuikDDdWYXKraKQOSlkxgHvYpAM8F5JIXDikAHOv8pqcmKQLVD6tt3z4pArhQks\u002fXUikBwGfjwJtqKQLWfTKEP34pAkuDSnLPjikDcpSyLFuiKQPQTBuU77IpAt2Ui9ibwikATpVrf2vOKQO6gjZha94pAmJCA8qj6ikDK\u002fq+YyP2KQN26EBO8AItAnK7Ax4UDi0Cokqf8JwaLQOiSB9mkCItA7gj+Zv4Ki0DrgvSUNg2LQIxcAjdPD4tAkDo\u002fCEoRi0DfwwasKBOLQJD6La\u002fsFItAXJ0qiZcWi0Ch\u002fiydKhiLQFjBLDunGYtAue7ooA4bi0Al2Nv6YRyLQLU5I2WiHYtAMBFd7NAei0BJnHmO7h+LQIrvgjv8IItAhZVa1vohi0Byo2016yKLQAyuXyPOI4tAnwatX6Qki0AtpUSfbiWLQMkhGo0tJotAtxuwyuEmi0DtaZvwiyeLQB5t\u002f44sKItAMNgDLsQoi0DlQEROUymLQA=="},"type":"scatter"},{"error_y":{"array":[12.618372848086764,14.15356256683573,13.317782598215565,12.19275741304374,4.366157731156018,10.891739989551722,8.723149278404758,3.1606961258558446,3.2562759915789314],"color":"#93c5fd","thickness":1.5,"type":"data","visible":true},"hovertemplate":"pH: %{x:.2f}\u003cbr\u003eMean: %{y:.2f}\u003cextra\u003eStandard\u003c\u002fextra\u003e","marker":{"color":"#2563eb","line":{"color":"#1e40af","width":1},"size":8},"mode":"markers","name":"Standard data","x":{"dtype":"f8","bdata":"AAAAAAAACEAAAAAAAAAMQAAAAAAAABBAAAAAAAAAEkAAAAAAAAAUQAAAAAAAABZAAAAAAAAAGEAAAAAAAAAaQAAAAAAAABxA"},"y":{"dtype":"f8","bdata":"VVVVVVV1XUCrqqqqqjpiQBERERER4W5AIyIiIiLCfUDd3d3d3c2EQDMzMzMzL4hAvLu7u7uPiUBnZmZmZj6KQLy7u7u7d4pA"},"type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"annotations":[{"bgcolor":"rgba(255,255,255,0.9)","bordercolor":"#d1d5db","borderpad":6,"borderwidth":1,"font":{"family":"monospace","size":11},"showarrow":false,"text":"y_min = 127.5802\u003cbr\u003ey_max = 870.3410\u003cbr\u003epKa = 4.7000\u003cbr\u003en = 1.0000\u003cbr\u003eR\u00b2 = 0.9895","x":0.98,"xanchor":"right","xref":"paper","y":0.02,"yanchor":"bottom","yref":"paper"}],"legend":{"x":0.02,"y":0.98,"bgcolor":"rgba(255,255,255,0.8)"},"margin":{"l":60,"r":30,"t":50,"b":50},"title":{"text":"Standard Curve"},"xaxis":{"title":{"text":"pH"}},"yaxis":{"title":{"text":"Signal"}},"hovermode":"closest","height":450},                        {"responsive": true}                    )                };            </script>        </div>
+  </div>
+</div>
+
+<h2>Standard Data</h2>
+<div class="card">
+  <table><thead><tr><th>pH</th><th>Mean</th><th>SD</th><th>N</th></tr></thead><tbody><tr><td>3.0000</td><td>117.8333</td><td>12.6184</td><td>3.0000</td></tr><tr><td>3.5000</td><td>145.8333</td><td>14.1536</td><td>3.0000</td></tr><tr><td>4.0000</td><td>247.0333</td><td>13.3178</td><td>3.0000</td></tr><tr><td>4.5000</td><td>476.1333</td><td>12.1928</td><td>3.0000</td></tr><tr><td>5.0000</td><td>665.7333</td><td>4.3662</td><td>3.0000</td></tr><tr><td>5.5000</td><td>773.9000</td><td>10.8917</td><td>3.0000</td></tr><tr><td>6.0000</td><td>817.9667</td><td>8.7231</td><td>3.0000</td></tr><tr><td>6.5000</td><td>839.8000</td><td>3.1607</td><td>3.0000</td></tr><tr><td>7.0000</td><td>846.9667</td><td>3.2563</td><td>3.0000</td></tr></tbody></table>
+</div>
+
+<h2>Sample pH Estimates</h2>
+<div class="card">
+  <div class="plot-container">
+    <div>                            <div id="sample-estimates" class="plotly-graph-div" style="height:500px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("sample-estimates")) {                    Plotly.newPlot(                        "sample-estimates",                        [{"hovertemplate":"pH: %{x:.2f}\u003cbr\u003eSignal: %{y:.2f}\u003cextra\u003eFitted\u003c\u002fextra\u003e","line":{"color":"#dc2626","width":2},"mode":"lines","name":"Fitted sigmoid","x":{"dtype":"f8","bdata":"AAAAAAAABEAJP7kQdTMEQBJ+ciHqZgRAG70rMl+aBEAk\u002fORC1M0EQC07nlNJAQVANnpXZL40BUA\u002fuRB1M2gFQEj4yYWomwVAUTeDlh3PBUBadjynkgIGQGO19bcHNgZAbPSuyHxpBkB1M2jZ8ZwGQH5yIepm0AZAh7Ha+tsDB0CQ8JMLUTcHQJkvTRzGagdAom4GLTueB0Crrb89sNEHQLTseE4lBQhAvSsyX5o4CEDGautvD2wIQM+ppICEnwhA2OhdkfnSCEDhJxeibgYJQOpm0LLjOQlA86WJw1htCUD85ELUzaAJQAUk\u002fORC1AlADmO19bcHCkAXom4GLTsKQCDhJxeibgpAKSDhJxeiCkAyX5o4jNUKQDueU0kBCQtARN0MWnY8C0BNHMZq628LQFZbf3tgowtAX5o4jNXWC0Bo2fGcSgoMQHIYq62\u002fPQxAeldkvjRxDECElh3PqaQMQIzV1t8e2AxAlhSQ8JMLDUCeU0kBCT8NQKiSAhJ+cg1AsNG7IvOlDUC6EHUzaNkNQMJPLkTdDA5AzI7nVFJADkDUzaBlx3MOQN4MWnY8pw5A5ksTh7HaDkDwisyXJg4PQPjJhaibQQ9AAgk\u002fuRB1D0AKSPjJhagPQBSHsdr62w9ADmO19bcHEECTAhJ+ciEQQBeibgYtOxBAnEHLjudUEEAg4ScXom4QQKWAhJ9ciBBAKSDhJxeiEECuvz2w0bsQQDJfmjiM1RBAt\u002f72wEbvEEA7nlNJAQkRQMA9sNG7IhFARN0MWnY8EUDJfGniMFYRQE0cxmrrbxFA0rsi86WJEUBWW397YKMRQNv62wMbvRFAX5o4jNXWEUDkOZUUkPARQGjZ8ZxKChJA7XhOJQUkEkByGKutvz0SQPa3BzZ6VxJAeldkvjRxEkD\u002f9sBG74oSQISWHc+ppBJACDZ6V2S+EkCM1dbfHtgSQBF1M2jZ8RJAlhSQ8JMLE0AatOx4TiUTQJ5TSQEJPxNAI\u002fOlicNYE0CokgISfnITQCwyX5o4jBNAsNG7IvOlE0A1cRirrb8TQLoQdTNo2RNAPrDRuyLzE0DCTy5E3QwUQEfvisyXJhRAzI7nVFJAFEBQLkTdDFoUQNTNoGXHcxRAWW397YGNFEDeDFp2PKcUQGKstv72wBRA5ksTh7HaFEBr628PbPQUQPCKzJcmDhVAdCopIOEnFUD4yYWom0EVQH1p4jBWWxVAAgk\u002fuRB1FUCGqJtBy44VQApI+MmFqBVAj+dUUkDCFUAUh7Ha+tsVQJgmDmO19RVAHMZq628PFkChZcdzKikWQCYFJPzkQhZAqqSAhJ9cFkAuRN0MWnYWQLPjOZUUkBZAOIOWHc+pFkC8IvOlicMWQEDCTy5E3RZAxWGstv72FkBKAQk\u002fuRAXQM6gZcdzKhdAUkDCTy5EF0DX3x7Y6F0XQFx\u002fe2CjdxdA4B7Y6F2RF0BkvjRxGKsXQOldkfnSxBdAbv3tgY3eF0DynEoKSPgXQHY8p5ICEhhA+9sDG70rGECAe2Cjd0UYQAQbvSsyXxhAiLoZtOx4GEANWnY8p5IYQJL50sRhrBhAFpkvTRzGGECaOIzV1t8YQB\u002fY6F2R+RhApHdF5ksTGUAoF6JuBi0ZQKy2\u002fvbARhlAMVZbf3tgGUC29bcHNnoZQDqVFJDwkxlAvjRxGKutGUBD1M2gZccZQMhzKikg4RlATBOHsdr6GUDRsuM5lRQaQFVSQMJPLhpA2vGcSgpIGkBekfnSxGEaQOMwVlt\u002fexpAZ9Cy4zmVGkDsbw9s9K4aQHAPbPSuyBpA9a7IfGniGkB5TiUFJPwaQP7tgY3eFRtAgo3eFZkvG0AHLTueU0kbQIvMlyYOYxtAEGz0rsh8G0CUC1E3g5YbQBmrrb89sBtAnUoKSPjJG0Ai6mbQsuMbQKaJw1ht\u002fRtAKykg4ScXHECvyHxp4jAcQDRo2fGcShxAuAc2eldkHEA9p5ICEn4cQMFG74rMlxxARuZLE4exHEDKhaibQcscQE8lBST85BxA08RhrLb+HEBYZL40cRgdQNwDG70rMh1AYaN3ReZLHUDlQtTNoGUdQGriMFZbfx1A7oGN3hWZHUBzIepm0LIdQPfARu+KzB1AfGCjd0XmHUAAAAAAAAAeQA=="},"y":{"dtype":"f8","bdata":"fVeE9JeHYEA3HhcnaZBgQKXqhvO+mWBAJiaOBqGjYEA4cQl7F65gQMhHtN8quWBAfFQkPeTEYECUVQQcTdFgQEszj4tv3mBASJhLKFbsYED6\u002fwcjDPtgQLLCFkidCmFAECrJBhYbYUC6CCh5gyxhQG+r52vzPmFADT6UZnRSYUBY6vKzFWdhQPUFk2rnfGFAu5aJdfqTYUB9RVCdYKxhQA6Fv5AsxmFAHjsa7nHhYUBZlx9MRf5hQNr4FUO8HGJAhMe\u002fde08YkD3+yia8F5iQIWzOYLegmJAsJv3I9GoYkCPOV2h49BiQNETq08y+2JAgpITvtonY0Av\u002f567+1ZjQCZ1IVy1iGNAyccY\u002fCi9Y0CrckRDefRjQAKTxSXKLmRAOb+Q40BsZECCW\u002fcFBK1kQEvaCVs78WRArD+Q7g85ZUDiVlIArIRlQO1rZfc61GVAjigyUuknZkBckOKS5H9mQHYr5idb3GZAKWo5UHw9Z0BhXh37d6NnQPtL7qJ+DmhAOn\u002fKIsF+aECfkr+GcPRoQNAPO9a9b2lAdGeE2NnwaUB41BHT9HdqQHghmEE+BWtALaLGh+SYa0CPOLWcFDNsQPYEIrD502xAxHy3ybx7bUDWA7JihCpuQM6rXfpz4G5AUiAJpqudb0D205jOIzFwQIV1auEvl3BA95p\u002flgMBcUDFnuvVpW5xQCQHyaga4HFA\u002fbtw\u002fmJVckAG2clzfM5yQIJLnR1hS3NAORnlVgfMc0AP6xeUYVB0QF+AdTxe2HRAtUtXiudjdUAbCYFz4\u002fJ1QGIbX5ozhXZAQZgLSbUad0C0+9Z2QbN3QKCi7tisTnhAF8SR\u002fsfseEB\u002fUhZ5X415QArhyg88MHpAx5OK\u002fyLVekCfqJ1F1nt7QLDxRfUUJHxAfWIcl5vNfED6bi2RJHh9QDE+j5ZoI35AxVEAHR\u002fPfkBJzvjW\u002fnp\u002fQJupPhhfE4BAOKV45glpgEDDMhCCW76AQMLuXS4wE4FAeeVLAWVngUCPfYcb2LqBQM6IC91oDYJA5iJdFfhegkCdDu8uaK+CQL63OlWd\u002foJAU\u002fw6lX1Mg0DjdxL48JiDQJFdxJfh44NAgCgDrjsthECH0jKd7XSEQHo81PPnuoRAmYakah3\u002fhEC07MzdgkGFQAgcjkEPgoVAItjckrvAhUCmLG3Egv2FQMeErahhOIZAwws02VZxhkCHAx+cYqiGQN+i5MeG3YZAGe0IpsYQh0DTNijVJkKHQEERvCqtcYdAan72lGCfh0AA9AT9SMuHQCQfAipv9YdADdXSpNwdiEACXiCdm0SIQFd\u002fmM+2aYhAO3uSbTmNiEDBxC8GL6+IQBR1B3Gjz4hA7K5kuqLuiEB1ERoROQyJQA4i57VyKIlAWSVo7FtDiUC\u002fMYXtAF2JQFlKUtttdYlAz\u002fpPtq6MiUAiK\u002fpTz6KJQCSlkVbbt4lA5fwLJt7LiUA9KRXq4t6JQJkLDoX08IlA3F\u002fzjx0CikDNARlXaBKKQJQZptfeIYpAoIm\u002fvYowikDR3E5jdT6KQBHsVM+nS4pA+Xa4tSpYikAl94F3BmSKQAIDdyNDb4pAP6AId+h5ikDr64jf\u002fYOKQOV7nXuKjYpAEdHkHJWWikDyGcZJJJ+KQPlgYz8+p4pARBCn8+iuikDDdWYXKraKQOSlkxgHvYpAM8F5JIXDikAHOv8pqcmKQLVD6tt3z4pArhQks\u002fXUikBwGfjwJtqKQLWfTKEP34pAkuDSnLPjikDcpSyLFuiKQPQTBuU77IpAt2Ui9ibwikATpVrf2vOKQO6gjZha94pAmJCA8qj6ikDK\u002fq+YyP2KQN26EBO8AItAnK7Ax4UDi0Cokqf8JwaLQOiSB9mkCItA7gj+Zv4Ki0DrgvSUNg2LQIxcAjdPD4tAkDo\u002fCEoRi0DfwwasKBOLQJD6La\u002fsFItAXJ0qiZcWi0Ch\u002fiydKhiLQFjBLDunGYtAue7ooA4bi0Al2Nv6YRyLQLU5I2WiHYtAMBFd7NAei0BJnHmO7h+LQIrvgjv8IItAhZVa1vohi0Byo2016yKLQAyuXyPOI4tAnwatX6Qki0AtpUSfbiWLQMkhGo0tJotAtxuwyuEmi0DtaZvwiyeLQB5t\u002f44sKItAMNgDLsQoi0DlQEROUymLQA=="},"type":"scatter"},{"hovertemplate":"pH: %{x:.2f}\u003cbr\u003eMean: %{y:.2f}\u003cextra\u003eStandard\u003c\u002fextra\u003e","marker":{"color":"#94a3b8","opacity":0.6,"size":6},"mode":"markers","name":"Standard data","x":{"dtype":"f8","bdata":"AAAAAAAACEAAAAAAAAAMQAAAAAAAABBAAAAAAAAAEkAAAAAAAAAUQAAAAAAAABZAAAAAAAAAGEAAAAAAAAAaQAAAAAAAABxA"},"y":{"dtype":"f8","bdata":"VVVVVVV1XUCrqqqqqjpiQBERERER4W5AIyIiIiLCfUDd3d3d3c2EQDMzMzMzL4hAvLu7u7uPiUBnZmZmZj6KQLy7u7u7d4pA"},"type":"scatter"},{"hoverinfo":"skip","line":{"color":"#2563eb","dash":"dash","width":1},"mode":"lines","showlegend":false,"x":[5.12429028471308,5.12429028471308],"y":[0,667.1999999999999],"type":"scatter"},{"hoverinfo":"skip","line":{"color":"#2563eb","dash":"dash","width":1},"mode":"lines","showlegend":false,"x":[2.5,5.12429028471308],"y":[667.1999999999999,667.1999999999999],"type":"scatter"},{"hovertemplate":"\u003cb\u003eControl\u003c\u002fb\u003e\u003cbr\u003eEstimated pH: 5.1243\u003cbr\u003eSignal mean: 667.20\u003cbr\u003eSignal SD: 6.45\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#2563eb","line":{"color":"black","width":1},"size":12,"symbol":"diamond"},"mode":"markers","name":"Control","x":[5.12429028471308],"y":[667.1999999999999],"type":"scatter"},{"hoverinfo":"skip","line":{"color":"#16a34a","dash":"dash","width":1},"mode":"lines","showlegend":false,"x":[4.2264977605488925,4.2264977605488925],"y":[0,314.43333333333334],"type":"scatter"},{"hoverinfo":"skip","line":{"color":"#16a34a","dash":"dash","width":1},"mode":"lines","showlegend":false,"x":[2.5,4.2264977605488925],"y":[314.43333333333334,314.43333333333334],"type":"scatter"},{"hovertemplate":"\u003cb\u003eDrugA\u003c\u002fb\u003e\u003cbr\u003eEstimated pH: 4.2265\u003cbr\u003eSignal mean: 314.43\u003cbr\u003eSignal SD: 5.80\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#16a34a","line":{"color":"black","width":1},"size":12,"symbol":"diamond"},"mode":"markers","name":"DrugA","x":[4.2264977605488925],"y":[314.43333333333334],"type":"scatter"},{"hoverinfo":"skip","line":{"color":"#d97706","dash":"dash","width":1},"mode":"lines","showlegend":false,"x":[5.673654901374742,5.673654901374742],"y":[0,799.0],"type":"scatter"},{"hoverinfo":"skip","line":{"color":"#d97706","dash":"dash","width":1},"mode":"lines","showlegend":false,"x":[2.5,5.673654901374742],"y":[799.0,799.0],"type":"scatter"},{"hovertemplate":"\u003cb\u003eDrugB\u003c\u002fb\u003e\u003cbr\u003eEstimated pH: 5.6737\u003cbr\u003eSignal mean: 799.00\u003cbr\u003eSignal SD: 6.26\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#d97706","line":{"color":"black","width":1},"size":12,"symbol":"diamond"},"mode":"markers","name":"DrugB","x":[5.673654901374742],"y":[799.0],"type":"scatter"},{"hoverinfo":"skip","line":{"color":"#7c3aed","dash":"dash","width":1},"mode":"lines","showlegend":false,"x":[3.7004439425431954,3.7004439425431954],"y":[0,195.16666666666666],"type":"scatter"},{"hoverinfo":"skip","line":{"color":"#7c3aed","dash":"dash","width":1},"mode":"lines","showlegend":false,"x":[2.5,3.7004439425431954],"y":[195.16666666666666,195.16666666666666],"type":"scatter"},{"hovertemplate":"\u003cb\u003eDrugC\u003c\u002fb\u003e\u003cbr\u003eEstimated pH: 3.7004\u003cbr\u003eSignal mean: 195.17\u003cbr\u003eSignal SD: 6.47\u003cextra\u003e\u003c\u002fextra\u003e","marker":{"color":"#7c3aed","line":{"color":"black","width":1},"size":12,"symbol":"diamond"},"mode":"markers","name":"DrugC","x":[3.7004439425431954],"y":[195.16666666666666],"type":"scatter"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"legend":{"x":0.02,"y":0.98,"bgcolor":"rgba(255,255,255,0.8)"},"margin":{"l":60,"r":30,"t":50,"b":50},"title":{"text":"Sample pH Estimates"},"xaxis":{"title":{"text":"pH"}},"yaxis":{"title":{"text":"Signal"}},"hovermode":"closest","height":500},                        {"responsive": true}                    )                };            </script>        </div>
+  </div>
+</div>
+
+<h2>Estimated pH Values</h2>
+<div class="card">
+  <table><thead><tr><th>Sample</th><th>Mean</th><th>SD</th><th>N</th><th>Estimated pH</th></tr></thead><tbody><tr><td>Control</td><td>667.2000</td><td>6.4490</td><td>3</td><td>5.1243</td></tr><tr><td>DrugA</td><td>314.4333</td><td>5.8046</td><td>3</td><td>4.2265</td></tr><tr><td>DrugB</td><td>799.0000</td><td>6.2554</td><td>3</td><td>5.6737</td></tr><tr><td>DrugC</td><td>195.1667</td><td>6.4733</td><td>3</td><td>3.7004</td></tr></tbody></table>
+</div>
+
+
+<div class="footer">
+  pHfit v0.1.0 — Sigmoid curve fitting for pH indicator data
+</div>
+
+</body>
+</html>
