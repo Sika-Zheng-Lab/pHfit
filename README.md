@@ -177,7 +177,7 @@ sampleB	525.3
 
 No internet connection is required after generating the report — all Plotly assets are loaded via CDN at generation time and the chart data is embedded inline.
 
-See an example report: [`example/output/report.html`](example/output/report.html)
+See an example report: [example/output/report.html](https://raw.githack.com/NaotoKubota/pHfit/main/example/output/report.html)
 
 ## CLI Options
 
