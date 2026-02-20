@@ -4,15 +4,14 @@
 [![GitHub Release](https://img.shields.io/github/v/release/NaotoKubota/pHfit?style=flat)](https://github.com/NaotoKubota/pHfit/releases)
 [![GitHub Release Date](https://img.shields.io/github/release-date/NaotoKubota/pHfit)](https://github.com/NaotoKubota/pHfit/releases)
 [![Tests](https://github.com/NaotoKubota/pHfit/actions/workflows/test.yml/badge.svg)](https://github.com/NaotoKubota/pHfit/actions/workflows/test.yml)
-[![Create Release](https://github.com/NaotoKubota/pHfit/actions/workflows/release.yaml/badge.svg)](https://github.com/NaotoKubota/pHfit/actions/workflows/release.yaml)
-[![Publish PyPI](https://github.com/NaotoKubota/pHfit/actions/workflows/publish.yaml/badge.svg)](https://github.com/NaotoKubota/pHfit/actions/workflows/publish.yaml)
+[![Create Release](https://github.com/NaotoKubota/pHfit/actions/workflows/release.yml/badge.svg)](https://github.com/NaotoKubota/pHfit/actions/workflows/release.yml)
+[![Publish PyPI](https://github.com/NaotoKubota/pHfit/actions/workflows/publish.yml/badge.svg)](https://github.com/NaotoKubota/pHfit/actions/workflows/publish.yml)
 [![Python](https://img.shields.io/pypi/pyversions/pHfit.svg?label=Python&color=blue)](https://pypi.org/project/pHfit/)
 [![PyPI](https://img.shields.io/pypi/v/pHfit.svg?label=PyPI&color=orange)](https://pypi.org/project/pHfit/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/pHfit.svg?label=PyPI%20-%20Downloads&color=orange)](https://pypi.org/project/pHfit/)
 [![Docker](https://img.shields.io/docker/v/naotokubota/pHfit?color=blue&label=Docker)](https://hub.docker.com/r/naotokubota/pHfit)
 [![Docker Pulls](https://img.shields.io/docker/pulls/naotokubota/pHfit)](https://hub.docker.com/r/naotokubota/pHfit)
 [![Docker Image Size](https://img.shields.io/docker/image-size/naotokubota/pHfit)](https://hub.docker.com/r/naotokubota/pHfit)
-[![License](https://img.shields.io/github/license/NaotoKubota/pHfit)](https://github.com/NaotoKubota/pHfit/blob/main/LICENSE)
 
 Estimate lysosomal pH from fluorescent indicator data using sigmoid curve fitting.
 
