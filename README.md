@@ -28,9 +28,7 @@ pHfit fits a Henderson-Hasselbalch-derived sigmoid function to standard curve da
 
 **Sigmoid function:**
 
-```
-F(pH) = y_min + (y_max - y_min) / (1 + 10^(n * (pKa - pH)))
-```
+$$F(\text{pH}) = y_{\min} + \frac{y_{\max} - y_{\min}}{1 + 10^{n \cdot (pK_a - \text{pH})}}$$
 
 | Parameter | Description |
 |-----------|-------------|
