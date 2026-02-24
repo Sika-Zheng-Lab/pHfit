@@ -25,6 +25,15 @@ env/
 .DS_Store
 Thumbs.db
 
-# Test outputs
+# Testing / Coverage
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
 tests/output/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Manuscript (generated figures, etc.)
 paper/

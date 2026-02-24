@@ -4,6 +4,7 @@
 [![GitHub Release](https://img.shields.io/github/v/release/NaotoKubota/pHfit?style=flat)](https://github.com/NaotoKubota/pHfit/releases)
 [![GitHub Release Date](https://img.shields.io/github/release-date/NaotoKubota/pHfit)](https://github.com/NaotoKubota/pHfit/releases)
 [![Tests](https://github.com/NaotoKubota/pHfit/actions/workflows/test.yml/badge.svg)](https://github.com/NaotoKubota/pHfit/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/NaotoKubota/pHfit/branch/main/graph/badge.svg)](https://codecov.io/gh/NaotoKubota/pHfit)
 [![Create Release](https://github.com/NaotoKubota/pHfit/actions/workflows/release.yml/badge.svg)](https://github.com/NaotoKubota/pHfit/actions/workflows/release.yml)
 [![Publish PyPI](https://github.com/NaotoKubota/pHfit/actions/workflows/publish.yml/badge.svg)](https://github.com/NaotoKubota/pHfit/actions/workflows/publish.yml)
 [![Python](https://img.shields.io/pypi/pyversions/pHfit.svg?label=Python&color=blue)](https://pypi.org/project/pHfit/)

@@ -238,7 +238,7 @@ def estimate_pH(
 
     ratio = (y_max - y_min) / (value - y_min) - 1.0
 
-    if ratio <= 0:
+    if ratio <= 0:  # pragma: no cover  — mathematically unreachable given range check above
         return float("nan")
 
     pH = pKa - (1.0 / n) * np.log10(ratio)
