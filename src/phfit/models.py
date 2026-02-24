@@ -1,5 +1,7 @@
 """Sigmoid curve fitting models for pH indicator data."""
 
+from __future__ import annotations
+
 import warnings
 
 import numpy as np

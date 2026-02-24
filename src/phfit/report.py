@@ -1,5 +1,7 @@
 """HTML report generation for pHfit results with interactive Plotly charts."""
 
+from __future__ import annotations
+
 import os
 from datetime import datetime
 
