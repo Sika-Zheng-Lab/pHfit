@@ -1,4 +1,4 @@
-"""pHfit - Estimate lysosomal pH from fluorescent indicator data using sigmoid curve fitting."""
+"""pHfit - Estimate intracellular pH from fluorescent indicator data using bidirectional sigmoid curve fitting."""
 
 from importlib.metadata import version, PackageNotFoundError
 

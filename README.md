@@ -14,7 +14,7 @@
 [![Docker Pulls](https://img.shields.io/docker/pulls/naotokubota/pHfit)](https://hub.docker.com/r/naotokubota/pHfit)
 [![Docker Image Size](https://img.shields.io/docker/image-size/naotokubota/pHfit)](https://hub.docker.com/r/naotokubota/pHfit)
 
-Estimate lysosomal pH from fluorescent indicator data using sigmoid curve fitting.
+Estimate intracellular pH from fluorescent indicator data using bidirectional sigmoid curve fitting.
 
 <p align="center">
   <img src="img/linear_vs_sigmoid.png" alt="Linear fit vs Sigmoid fit comparison" width="750">

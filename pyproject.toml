@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "pHfit"
 version = "0.1.0"
-description = "Estimate lysosomal pH from fluorescent indicator data using sigmoid curve fitting"
+description = "Estimate intracellular pH from fluorescent indicator data using bidirectional sigmoid curve fitting"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.9,<3.15"
