@@ -162,7 +162,8 @@ If you are not familiar with TSV files, you can easily create them from Microsof
 2. **Excel:** Go to **File → Save As**, choose **Text (Tab delimited) (\*.txt)** as the file format, and save. Then rename the file extension from `.txt` to `.tsv`.
 3. **Google Sheets:** Go to **File → Download → Tab-separated values (.tsv)**.
 
-> **Note:** Make sure the first row contains exactly the column headers `pH` and `value` (for the standard curve) or `sample` and `value` (for sample data). Do not include extra blank rows or columns.
+> [!Note]
+>  Make sure the first row contains exactly the column headers `pH` and `value` (for the standard curve) or `sample` and `value` (for sample data). Do not include extra blank rows or columns.
 
 ## Output Files
 
@@ -226,7 +227,8 @@ See an example report: [example/output/report.html](https://raw.githack.com/Naot
 
 Some pH indicators (e.g., BCECF, SNARF-1, HPTS, LysoSensor Yellow/Blue) are measured ratiometrically — the ratio of fluorescence at two excitation or emission wavelengths is used instead of a single intensity value. The Henderson-Hasselbalch sigmoid model applies equally to ratio data; users simply provide the pre-computed fluorescence ratio in the `value` column of the input TSV.
 
-> **Tip:** For ratiometric indicators, the preset pKa represents a *typical* apparent pKa that may vary depending on your optical setup (filter sets, detector gains, etc.). Consider omitting `--pka` or using `--hill fit` to let pHfit estimate all parameters freely from your calibration data.
+> [!Tip]
+> For ratiometric indicators, the preset pKa represents a *typical* apparent pKa that may vary depending on your optical setup (filter sets, detector gains, etc.). Consider omitting `--pka` or using `--hill fit` to let pHfit estimate all parameters freely from your calibration data.
 
 ## License
 
