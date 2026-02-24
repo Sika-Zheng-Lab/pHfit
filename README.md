@@ -19,7 +19,7 @@ Estimate lysosomal pH from fluorescent indicator data using sigmoid curve fittin
   <img src="img/linear_vs_sigmoid.png" alt="Linear fit vs Sigmoid fit comparison" width="750">
 </p>
 
-The relationship between pH and fluorescence intensity of pH-sensitive indicators is inherently **sigmoidal**, governed by the Henderson-Hasselbalch equation. While a linear approximation may appear adequate over a narrow pH range near the pKa, it **systematically misestimates pH** at both ends of the dynamic range — precisely where many biological samples fall. A sigmoid fit faithfully captures the saturation behavior at extreme pH values, yielding accurate estimates across the full range of the indicator.
+The relationship between pH and fluorescence signal (intensity or ratio) of pH-sensitive indicators is inherently **sigmoidal**, governed by the Henderson-Hasselbalch equation. While a linear approximation may appear adequate over a narrow pH range near the pKa, it **systematically misestimates pH** at both ends of the dynamic range — precisely where many biological samples fall. A sigmoid fit faithfully captures the saturation behavior at extreme pH values, yielding accurate estimates across the full range of the indicator.
 
 ## Overview
 
@@ -118,6 +118,8 @@ phfit -i standard_curve.tsv -s sample.tsv -o output/ --hill fit
 
 Tab-separated file with columns `pH` and `value`. Replicates (rows with the same pH) are automatically averaged.
 
+The `value` column accepts any scalar fluorescence readout — single-wavelength intensity, fluorescence ratio, or any other derived metric. The same sigmoid model applies to all cases.
+
 ```
 pH	value
 3.0	105.2
@@ -150,6 +152,16 @@ sampleB	520.4
 sampleB	518.9
 sampleB	525.3
 ```
+
+### Creating TSV files from Excel
+
+If you are not familiar with TSV files, you can easily create them from Microsoft Excel or Google Sheets:
+
+1. Open Excel (or Google Sheets) and enter your data with the column headers (`pH` and `value`, or `sample` and `value`) in the first row.
+2. **Excel:** Go to **File → Save As**, choose **Text (Tab delimited) (\*.txt)** as the file format, and save. Then rename the file extension from `.txt` to `.tsv`.
+3. **Google Sheets:** Go to **File → Download → Tab-separated values (.tsv)**.
+
+> **Note:** Make sure the first row contains exactly the column headers `pH` and `value` (for the standard curve) or `sample` and `value` (for sample data). Do not include extra blank rows or columns.
 
 ## Output Files
 
@@ -209,6 +221,12 @@ See an example report: [example/output/report.html](https://raw.githack.com/Naot
 | `cypher5e` | CypHer5E | 7.3 | ↓ descending |
 | `hpts` | HPTS (Pyranine) | 7.3 | ↑ ascending |
 
+## Note on Ratiometric Indicators
+
+Some pH indicators (e.g., BCECF, SNARF-1, HPTS, LysoSensor Yellow/Blue) are measured ratiometrically — the ratio of fluorescence at two excitation or emission wavelengths is used instead of a single intensity value. The Henderson-Hasselbalch sigmoid model applies equally to ratio data; users simply provide the pre-computed fluorescence ratio in the `value` column of the input TSV.
+
+> **Tip:** For ratiometric indicators, the preset pKa represents a *typical* apparent pKa that may vary depending on your optical setup (filter sets, detector gains, etc.). Consider omitting `--pka` or using `--hill fit` to let pHfit estimate all parameters freely from your calibration data.
+
 ## License
 
 MIT License
@@ -220,3 +238,4 @@ Thank you for wanting to improve pHfit! If you have any bugs or questions, feel 
 ## Authors
 
 - Naoto Kubota ([0000-0003-0612-2300](https://orcid.org/0000-0003-0612-2300))
+- Sika Zheng ([0000-0002-0573-4981](https://orcid.org/0000-0002-0573-4981))
