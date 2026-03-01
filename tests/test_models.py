@@ -5,7 +5,7 @@ import math
 import numpy as np
 import pytest
 
-from phfit.models import _detect_direction, estimate_pH, fit_sigmoid, sigmoid
+from phfit.models import _detect_direction, classify_out_of_range, estimate_pH, fit_sigmoid, sigmoid
 
 
 class TestSigmoid:
@@ -203,3 +203,40 @@ class TestDescendingSigmoid:
             value = sigmoid(test_pH, y_min, y_max, pKa, n)
             estimated = estimate_pH(value, y_min, y_max, pKa, n)
             assert abs(estimated - test_pH) < 1e-6, f"Failed for pH={test_pH}"
+
+
+class TestClassifyOutOfRange:
+    """Tests for classify_out_of_range."""
+
+    def test_within_range(self):
+        """Value inside range should return None."""
+        assert classify_out_of_range(500.0, 100.0, 1000.0) is None
+
+    def test_below_lower(self):
+        """Value below lower bound should return 'below_lower'."""
+        assert classify_out_of_range(50.0, 100.0, 1000.0) == "below_lower"
+
+    def test_above_upper(self):
+        """Value above upper bound should return 'above_upper'."""
+        assert classify_out_of_range(1100.0, 100.0, 1000.0) == "above_upper"
+
+    def test_at_lower_boundary(self):
+        """Value exactly at lower bound should return 'below_lower'."""
+        assert classify_out_of_range(100.0, 100.0, 1000.0) == "below_lower"
+
+    def test_at_upper_boundary(self):
+        """Value exactly at upper bound should return 'above_upper'."""
+        assert classify_out_of_range(1000.0, 100.0, 1000.0) == "above_upper"
+
+    def test_descending_below(self):
+        """Descending curve (y_min > y_max): value below min(y_min,y_max)."""
+        # y_min=1000, y_max=100 → low=100, high=1000
+        assert classify_out_of_range(50.0, 1000.0, 100.0) == "below_lower"
+
+    def test_descending_above(self):
+        """Descending curve (y_min > y_max): value above max(y_min,y_max)."""
+        assert classify_out_of_range(1100.0, 1000.0, 100.0) == "above_upper"
+
+    def test_descending_within(self):
+        """Descending curve: value within range."""
+        assert classify_out_of_range(500.0, 1000.0, 100.0) is None

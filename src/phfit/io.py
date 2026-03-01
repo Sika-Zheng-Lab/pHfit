@@ -1,5 +1,8 @@
 """Input/output utilities for reading TSV files and writing results."""
 
+import json
+import math
+
 import pandas as pd
 
 
@@ -77,6 +80,46 @@ def read_samples(path: str) -> pd.DataFrame:
 def write_results(df: pd.DataFrame, path: str) -> None:
     """Write a DataFrame to a TSV file."""
     df.to_csv(path, sep="\t", index=False, float_format="%.6f")
+
+
+def write_summary(summary: dict, path: str) -> None:
+    """
+    Write a run summary dictionary to a JSON file.
+
+    ``float('nan')`` and ``float('inf')`` values are converted to ``None``
+    so that the output is valid JSON.
+
+    Parameters
+    ----------
+    summary : dict
+        Summary dictionary to serialise.
+    path : str
+        Output file path.
+    """
+
+    class _SafeEncoder(json.JSONEncoder):
+        """Encode non-finite floats as null."""
+
+        def default(self, o):
+            if isinstance(o, float) and (math.isnan(o) or math.isinf(o)):
+                return None
+            return super().default(o)
+
+        def encode(self, o):
+            return super().encode(_sanitize(o))
+
+    def _sanitize(obj):
+        if isinstance(obj, float) and (math.isnan(obj) or math.isinf(obj)):
+            return None
+        if isinstance(obj, dict):
+            return {k: _sanitize(v) for k, v in obj.items()}
+        if isinstance(obj, (list, tuple)):
+            return [_sanitize(v) for v in obj]
+        return obj
+
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(_sanitize(summary), f, indent=2, ensure_ascii=False)
+        f.write("\n")
 
 
 def write_params(params: dict, path: str) -> None:

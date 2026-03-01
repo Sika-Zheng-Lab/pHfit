@@ -4,10 +4,11 @@ import argparse
 import logging
 import os
 import sys
+from datetime import datetime, timezone
 
 from . import __version__
-from .io import read_samples, read_standard, write_params, write_results
-from .models import _detect_direction, estimate_pH, fit_sigmoid
+from .io import read_samples, read_standard, write_params, write_results, write_summary
+from .models import _detect_direction, classify_out_of_range, estimate_pH, fit_sigmoid
 from .plot import plot_sample_estimates, plot_standard_curve
 from .presets import get_preset, list_presets
 from .report import generate_report
@@ -198,6 +199,35 @@ def main(argv=None):
     # --- Output directory ---
     os.makedirs(args.output, exist_ok=True)
 
+    # --- Build summary ---
+    fixed_params = [
+        name for name, val in [
+            ("y_min", fix_ymin), ("y_max", fix_ymax),
+            ("pKa", fix_pKa), ("n", fix_n),
+        ] if val is not None
+    ]
+    summary: dict = {
+        "phfit_version": __version__,
+        "timestamp": datetime.now(timezone.utc).astimezone().isoformat(),
+        "input": {
+            "standard_curve_file": os.path.basename(args.input),
+            "sample_file": os.path.basename(args.sample) if args.sample else None,
+            "preset": preset_name,
+        },
+        "fit": {
+            "y_min": params["y_min"],
+            "y_max": params["y_max"],
+            "pKa": params["pKa"],
+            "n": params["n"],
+            "r_squared": params["r_squared"],
+            "direction": params["direction"],
+            "fixed_params": fixed_params,
+            "n_standard_points": len(standard_df),
+            "n_standard_replicates_total": int(standard_df["n"].sum()),
+        },
+        "samples": None,
+    }
+
     # Write parameters
     params_path = os.path.join(args.output, "fit_params.tsv")
     write_params(params, params_path)
@@ -244,11 +274,60 @@ def main(argv=None):
         raw_sample_df.to_csv(raw_results_path, sep="\t", index=False, float_format="%.6f")
         logger.info("Per-replicate results saved: %s", raw_results_path)
 
+        # --- Build per-sample summary statistics ---
+        per_sample_stats = []
+        for sample_name, group in raw_sample_df.groupby("sample", sort=False):
+            n_reps = len(group)
+            n_below = 0
+            n_above = 0
+            for val in group["value"]:
+                classification = classify_out_of_range(val, params["y_min"], params["y_max"])
+                if classification == "below_lower":
+                    n_below += 1
+                elif classification == "above_upper":
+                    n_above += 1
+            agg_row = sample_df[sample_df["sample"] == sample_name].iloc[0]
+            per_sample_stats.append({
+                "sample": str(sample_name),
+                "n_replicates": n_reps,
+                "mean_value": float(agg_row["mean"]),
+                "estimated_pH": float(agg_row["estimated_pH"]),
+                "n_replicates_out_of_range": n_below + n_above,
+                "n_replicates_below_lower": n_below,
+                "n_replicates_above_upper": n_above,
+            })
+
+        total_reps = int(raw_sample_df.shape[0])
+        total_below = sum(s["n_replicates_below_lower"] for s in per_sample_stats)
+        total_above = sum(s["n_replicates_above_upper"] for s in per_sample_stats)
+        total_oor = total_below + total_above
+        low_bound = min(params["y_min"], params["y_max"])
+        high_bound = max(params["y_min"], params["y_max"])
+
+        summary["samples"] = {
+            "n_samples": len(sample_df),
+            "n_replicates_total": total_reps,
+            "n_estimated_successfully": total_reps - total_oor,
+            "n_out_of_range": total_oor,
+            "n_below_lower_bound": total_below,
+            "n_above_upper_bound": total_above,
+            "estimable_range": {
+                "signal_low": low_bound,
+                "signal_high": high_bound,
+            },
+            "per_sample": per_sample_stats,
+        }
+
         # Plot sample estimates
         plot_sample_estimates(standard_df, sample_df, params, args.output, dpi=args.dpi)
         logger.info("Sample estimates plot saved: %s/sample_estimates.{pdf,png}", args.output)
 
         sample_result_df = sample_df
+
+    # --- Write summary JSON ---
+    summary_path = os.path.join(args.output, "summary.json")
+    write_summary(summary, summary_path)
+    logger.info("Run summary saved: %s", summary_path)
 
     # --- Generate HTML report ---
     report_path = generate_report(

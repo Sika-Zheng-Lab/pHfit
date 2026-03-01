@@ -1,5 +1,6 @@
 """End-to-end tests for the pHfit CLI."""
 
+import json
 import os
 import tempfile
 
@@ -72,6 +73,7 @@ class TestCLI:
         assert os.path.exists(os.path.join(output_dir, "sample_estimates.pdf"))
         assert os.path.exists(os.path.join(output_dir, "sample_estimates.png"))
         assert os.path.exists(os.path.join(output_dir, "report.html"))
+        assert os.path.exists(os.path.join(output_dir, "summary.json"))
 
         # Check fit params
         params_df = pd.read_csv(os.path.join(output_dir, "fit_params.tsv"), sep="\t")
@@ -97,6 +99,21 @@ class TestCLI:
         assert "plotly" in html.lower()
         assert "standard-curve" in html
 
+        # Check summary.json
+        with open(os.path.join(output_dir, "summary.json")) as f:
+            summary = json.load(f)
+        assert "phfit_version" in summary
+        assert "timestamp" in summary
+        assert summary["input"]["sample_file"] is not None
+        assert summary["fit"]["r_squared"] > 0.95
+        assert summary["fit"]["n_standard_points"] == 9
+        assert summary["samples"] is not None
+        assert summary["samples"]["n_samples"] == 3
+        assert summary["samples"]["n_replicates_total"] == 9
+        assert len(summary["samples"]["per_sample"]) == 3
+        # All samples are in range for this data
+        assert summary["samples"]["n_out_of_range"] == 0
+
     def test_standard_only(self, test_data_dir):
         """Run without sample file."""
         output_dir = os.path.join(test_data_dir["dir"], "output_std_only")
@@ -108,7 +125,14 @@ class TestCLI:
         assert os.path.exists(os.path.join(output_dir, "fit_params.tsv"))
         assert os.path.exists(os.path.join(output_dir, "standard_curve.png"))
         assert os.path.exists(os.path.join(output_dir, "report.html"))
+        assert os.path.exists(os.path.join(output_dir, "summary.json"))
         assert not os.path.exists(os.path.join(output_dir, "estimated_pH.tsv"))
+
+        # summary.json should have samples=null
+        with open(os.path.join(output_dir, "summary.json")) as f:
+            summary = json.load(f)
+        assert summary["samples"] is None
+        assert summary["fit"]["n_standard_points"] == 9
 
     def test_preset(self, test_data_dir):
         """Run with a preset."""
@@ -255,3 +279,73 @@ class TestDescendingCLI:
         params_df = pd.read_csv(os.path.join(output_dir, "fit_params.tsv"), sep="\t")
         n_row = params_df[params_df["parameter"] == "n"]
         assert n_row["value"].values[0] < 0  # should detect descending
+
+
+class TestSummaryOutOfRange:
+    """Tests that summary.json correctly counts out-of-range samples."""
+
+    def test_out_of_range_counts(self, test_data_dir):
+        """Samples with extreme values should be counted as out-of-range."""
+        # Create a sample file with some out-of-range values
+        # The standard curve uses y_min~100, y_max~800, so values
+        # outside this range should be flagged
+        sample_data = [
+            {"sample": "normal", "value": 450.0},
+            {"sample": "normal", "value": 460.0},
+            {"sample": "too_low", "value": 10.0},    # below lower bound
+            {"sample": "too_low", "value": 20.0},     # below lower bound
+            {"sample": "too_low", "value": 450.0},    # normal replicate
+            {"sample": "too_high", "value": 9999.0},  # above upper bound
+            {"sample": "too_high", "value": 450.0},   # normal replicate
+        ]
+        sample_df = pd.DataFrame(sample_data)
+        sample_path = os.path.join(test_data_dir["dir"], "oor_sample.tsv")
+        sample_df.to_csv(sample_path, sep="\t", index=False)
+
+        output_dir = os.path.join(test_data_dir["dir"], "output_oor")
+        main([
+            "-i", test_data_dir["std_path"],
+            "-s", sample_path,
+            "-o", output_dir,
+        ])
+
+        with open(os.path.join(output_dir, "summary.json")) as f:
+            summary = json.load(f)
+
+        samples = summary["samples"]
+        assert samples["n_samples"] == 3
+        assert samples["n_replicates_total"] == 7
+        assert samples["n_below_lower_bound"] == 2
+        assert samples["n_above_upper_bound"] == 1
+        assert samples["n_out_of_range"] == 3
+        assert samples["n_estimated_successfully"] == 4
+
+        # Check per_sample breakdown
+        per_sample = {s["sample"]: s for s in samples["per_sample"]}
+        assert per_sample["normal"]["n_replicates_out_of_range"] == 0
+        assert per_sample["too_low"]["n_replicates_below_lower"] == 2
+        assert per_sample["too_low"]["n_replicates_above_upper"] == 0
+        assert per_sample["too_high"]["n_replicates_above_upper"] == 1
+        assert per_sample["too_high"]["n_replicates_below_lower"] == 0
+
+    def test_summary_nan_handling(self, test_data_dir):
+        """Out-of-range estimated_pH (NaN) should be serialised as null in JSON."""
+        sample_data = [
+            {"sample": "oor", "value": 10.0},  # will produce NaN pH
+        ]
+        sample_df = pd.DataFrame(sample_data)
+        sample_path = os.path.join(test_data_dir["dir"], "nan_sample.tsv")
+        sample_df.to_csv(sample_path, sep="\t", index=False)
+
+        output_dir = os.path.join(test_data_dir["dir"], "output_nan")
+        main([
+            "-i", test_data_dir["std_path"],
+            "-s", sample_path,
+            "-o", output_dir,
+        ])
+
+        with open(os.path.join(output_dir, "summary.json")) as f:
+            summary = json.load(f)
+
+        oor_sample = summary["samples"]["per_sample"][0]
+        assert oor_sample["estimated_pH"] is None  # NaN -> null

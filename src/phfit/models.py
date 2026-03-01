@@ -245,3 +245,35 @@ def estimate_pH(
 
     pH = pKa - (1.0 / n) * np.log10(ratio)
     return float(pH)
+
+
+def classify_out_of_range(
+    value: float,
+    y_min: float,
+    y_max: float,
+) -> str | None:
+    """
+    Classify whether a signal value is outside the estimable range.
+
+    Parameters
+    ----------
+    value : float
+        Measured signal value.
+    y_min, y_max : float
+        Fitted sigmoid asymptotes.
+
+    Returns
+    -------
+    str or None
+        ``"below_lower"`` if the value is at or below the lower asymptote,
+        ``"above_upper"`` if it is at or above the upper asymptote,
+        or ``None`` if the value is within the estimable range.
+    """
+    low = min(y_min, y_max)
+    high = max(y_min, y_max)
+
+    if value <= low:
+        return "below_lower"
+    if value >= high:
+        return "above_upper"
+    return None
