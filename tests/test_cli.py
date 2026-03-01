@@ -113,6 +113,7 @@ class TestCLI:
         assert len(summary["samples"]["per_sample"]) == 3
         # All samples are in range for this data
         assert summary["samples"]["n_out_of_range"] == 0
+        assert summary["samples"]["include_out_of_range"] is False
 
     def test_standard_only(self, test_data_dir):
         """Run without sample file."""
@@ -313,6 +314,7 @@ class TestSummaryOutOfRange:
             summary = json.load(f)
 
         samples = summary["samples"]
+        assert samples["include_out_of_range"] is False
         assert samples["n_samples"] == 3
         assert samples["n_replicates_total"] == 7
         assert samples["n_below_lower_bound"] == 2
@@ -327,6 +329,55 @@ class TestSummaryOutOfRange:
         assert per_sample["too_low"]["n_replicates_above_upper"] == 0
         assert per_sample["too_high"]["n_replicates_above_upper"] == 1
         assert per_sample["too_high"]["n_replicates_below_lower"] == 0
+
+        # Verify OOR replicates were excluded from mean/SD
+        # too_low: only in-range value is 450.0 → mean=450.0
+        est_df = pd.read_csv(os.path.join(output_dir, "estimated_pH.tsv"), sep="\t")
+        too_low_row = est_df[est_df["sample"] == "too_low"].iloc[0]
+        assert abs(too_low_row["mean"] - 450.0) < 1e-6
+        assert too_low_row["n"] == 1
+
+    def test_include_out_of_range_flag(self, test_data_dir):
+        """--include-out-of-range should use all replicates for mean/SD."""
+        sample_data = [
+            {"sample": "mixed", "value": 10.0},     # below lower bound
+            {"sample": "mixed", "value": 450.0},
+            {"sample": "mixed", "value": 460.0},
+        ]
+        sample_df = pd.DataFrame(sample_data)
+        sample_path = os.path.join(test_data_dir["dir"], "oor_incl_sample.tsv")
+        sample_df.to_csv(sample_path, sep="\t", index=False)
+
+        # Default (exclude OOR)
+        out_excl = os.path.join(test_data_dir["dir"], "output_excl")
+        main([
+            "-i", test_data_dir["std_path"],
+            "-s", sample_path,
+            "-o", out_excl,
+        ])
+        df_excl = pd.read_csv(os.path.join(out_excl, "estimated_pH.tsv"), sep="\t")
+        # Excluded: mean of [450, 460] = 455
+        assert abs(df_excl.iloc[0]["mean"] - 455.0) < 1e-6
+        assert df_excl.iloc[0]["n"] == 2
+
+        # With --include-out-of-range
+        out_incl = os.path.join(test_data_dir["dir"], "output_incl")
+        main([
+            "-i", test_data_dir["std_path"],
+            "-s", sample_path,
+            "-o", out_incl,
+            "--include-out-of-range",
+        ])
+        df_incl = pd.read_csv(os.path.join(out_incl, "estimated_pH.tsv"), sep="\t")
+        # Included: mean of [10, 450, 460] ≈ 306.67
+        expected_mean = (10.0 + 450.0 + 460.0) / 3.0
+        assert abs(df_incl.iloc[0]["mean"] - expected_mean) < 1e-4
+        assert df_incl.iloc[0]["n"] == 3
+
+        # summary.json should reflect the flag
+        with open(os.path.join(out_incl, "summary.json")) as f:
+            summary = json.load(f)
+        assert summary["samples"]["include_out_of_range"] is True
 
     def test_summary_nan_handling(self, test_data_dir):
         """Out-of-range estimated_pH (NaN) should be serialised as null in JSON."""

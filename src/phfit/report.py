@@ -330,7 +330,15 @@ def _build_sample_estimates_plotly(standard_df, sample_df, params: dict) -> str:
             hoverinfo="skip",
         ))
 
-        # Sample marker
+        # Sample marker with SD error bar
+        error_y_dict = dict(
+            type="data",
+            array=[row["sd"]],
+            visible=row["sd"] > 0,
+            color=color,
+            thickness=1.5,
+            width=6,
+        )
         fig.add_trace(go.Scatter(
             x=[row["estimated_pH"]],
             y=[row["mean"]],
@@ -340,6 +348,7 @@ def _build_sample_estimates_plotly(standard_df, sample_df, params: dict) -> str:
                 color=color, size=12, symbol="diamond",
                 line=dict(width=1, color="black"),
             ),
+            error_y=error_y_dict,
             hovertemplate=(
                 f"<b>{row['sample']}</b><br>"
                 f"Estimated pH: {row['estimated_pH']:.4f}<br>"

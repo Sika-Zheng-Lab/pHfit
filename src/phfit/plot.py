@@ -151,14 +151,19 @@ def plot_sample_estimates(
     if len(valid) > 0:
         colors = plt.cm.tab10(np.linspace(0, 1, len(valid)))
         for i, (_, row) in enumerate(valid.iterrows()):
-            ax.scatter(
+            yerr = row["sd"] if row["sd"] > 0 else None
+            ax.errorbar(
                 row["estimated_pH"],
                 row["mean"],
+                yerr=yerr,
+                fmt="D",
                 color=colors[i],
-                s=80,
-                marker="D",
-                edgecolors="black",
-                linewidths=0.5,
+                ecolor=colors[i],
+                elinewidth=1.5,
+                capsize=4,
+                markersize=8,
+                markeredgecolor="black",
+                markeredgewidth=0.5,
                 label=row["sample"],
                 zorder=4,
             )

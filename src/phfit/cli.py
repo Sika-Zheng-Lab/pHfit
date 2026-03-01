@@ -7,7 +7,7 @@ import sys
 from datetime import datetime, timezone
 
 from . import __version__
-from .io import read_samples, read_standard, write_params, write_results, write_summary
+from .io import read_standard, write_params, write_results, write_summary
 from .models import _detect_direction, classify_out_of_range, estimate_pH, fit_sigmoid
 from .plot import plot_sample_estimates, plot_standard_curve
 from .presets import get_preset, list_presets
@@ -90,6 +90,13 @@ def parse_args(argv=None):
         action="store_true",
         default=False,
         help="Enable verbose (DEBUG-level) logging output.",
+    )
+    parser.add_argument(
+        "--include-out-of-range",
+        action="store_true",
+        default=False,
+        help="Include out-of-range replicates when calculating sample mean and SD. "
+             "By default, replicates with signal outside the fitted range are excluded.",
     )
 
     return parser.parse_args(argv)
@@ -240,9 +247,75 @@ def main(argv=None):
     # --- Sample estimation ---
     sample_result_df = None
     if args.sample:
+        import pandas as _pd
+
         logger.info("Reading sample data: %s", args.sample)
-        sample_df = read_samples(args.sample)
-        logger.info("  %d samples (%d total measurements)", len(sample_df), int(sample_df["n"].sum()))
+        raw_sample_df = _pd.read_csv(args.sample, sep="\t")
+
+        # Validate columns
+        _required = {"sample", "value"}
+        if not _required.issubset(raw_sample_df.columns):
+            raise ValueError(
+                f"Sample file must contain columns {_required}. "
+                f"Found: {set(raw_sample_df.columns)}"
+            )
+
+        sample_order = raw_sample_df["sample"].unique()
+        n_total_reps = len(raw_sample_df)
+        logger.info(
+            "  %d samples (%d total measurements)",
+            len(sample_order), n_total_reps,
+        )
+
+        # Classify each replicate as in-range or out-of-range
+        raw_sample_df["_oor_class"] = raw_sample_df["value"].apply(
+            lambda v: classify_out_of_range(v, params["y_min"], params["y_max"])
+        )
+
+        # Determine which replicates to use for aggregation
+        include_oor = args.include_out_of_range
+        if include_oor:
+            agg_source = raw_sample_df
+            logger.info("  Including all replicates in mean/SD calculation")
+        else:
+            n_oor = int(raw_sample_df["_oor_class"].notna().sum())
+            agg_source = raw_sample_df[raw_sample_df["_oor_class"].isna()]
+            if n_oor > 0:
+                logger.info(
+                    "  Excluding %d out-of-range replicates from mean/SD calculation",
+                    n_oor,
+                )
+
+        # Aggregate replicates
+        if len(agg_source) > 0:
+            grouped = (
+                agg_source.groupby("sample", sort=False)["value"]
+                .agg(["mean", "std", "count"])
+                .reset_index()
+            )
+            grouped.columns = ["sample", "mean", "sd", "n"]
+            grouped["sd"] = grouped["sd"].fillna(0.0)
+        else:
+            grouped = _pd.DataFrame(columns=["sample", "mean", "sd", "n"])
+
+        # Ensure samples with ALL replicates out-of-range are still listed
+        missing = [s for s in sample_order if s not in grouped["sample"].values]
+        if missing:
+            missing_df = _pd.DataFrame({
+                "sample": missing,
+                "mean": [float("nan")] * len(missing),
+                "sd": [0.0] * len(missing),
+                "n": [0] * len(missing),
+            })
+            grouped = _pd.concat([grouped, missing_df], ignore_index=True)
+
+        # Restore original sample order
+        grouped["sample"] = _pd.Categorical(
+            grouped["sample"], categories=sample_order, ordered=True,
+        )
+        grouped = grouped.sort_values("sample").reset_index(drop=True)
+        grouped["sample"] = grouped["sample"].astype(str)
+        sample_df = grouped
 
         # Estimate pH for each sample (aggregated means)
         estimated_pH = []
@@ -254,7 +327,11 @@ def main(argv=None):
         # Print results
         logger.info("Estimated pH values:")
         for _, row in sample_df.iterrows():
-            pH_str = f"{row['estimated_pH']:.4f}" if not (row["estimated_pH"] != row["estimated_pH"]) else "NaN (out of range)"
+            pH_str = (
+                f"{row['estimated_pH']:.4f}"
+                if not (row["estimated_pH"] != row["estimated_pH"])
+                else "NaN (out of range)"
+            )
             logger.info("  %s: %s", row["sample"], pH_str)
 
         # Write aggregated results
@@ -263,30 +340,26 @@ def main(argv=None):
         logger.info("Results saved: %s", results_path)
 
         # Estimate pH for each individual replicate and write to separate file
-        import pandas as _pd
-        raw_sample_df = _pd.read_csv(args.sample, sep="\t")
         raw_estimated = []
         for _, row in raw_sample_df.iterrows():
-            pH = estimate_pH(row["value"], params["y_min"], params["y_max"], params["pKa"], params["n"])
+            pH = estimate_pH(
+                row["value"], params["y_min"], params["y_max"],
+                params["pKa"], params["n"],
+            )
             raw_estimated.append(pH)
         raw_sample_df["estimated_pH"] = raw_estimated
+        raw_out = raw_sample_df[["sample", "value", "estimated_pH"]]
         raw_results_path = os.path.join(args.output, "estimated_pH_all.tsv")
-        raw_sample_df.to_csv(raw_results_path, sep="\t", index=False, float_format="%.6f")
+        raw_out.to_csv(raw_results_path, sep="\t", index=False, float_format="%.6f")
         logger.info("Per-replicate results saved: %s", raw_results_path)
 
         # --- Build per-sample summary statistics ---
         per_sample_stats = []
         for sample_name, group in raw_sample_df.groupby("sample", sort=False):
             n_reps = len(group)
-            n_below = 0
-            n_above = 0
-            for val in group["value"]:
-                classification = classify_out_of_range(val, params["y_min"], params["y_max"])
-                if classification == "below_lower":
-                    n_below += 1
-                elif classification == "above_upper":
-                    n_above += 1
-            agg_row = sample_df[sample_df["sample"] == sample_name].iloc[0]
+            n_below = int((group["_oor_class"] == "below_lower").sum())
+            n_above = int((group["_oor_class"] == "above_upper").sum())
+            agg_row = sample_df[sample_df["sample"] == str(sample_name)].iloc[0]
             per_sample_stats.append({
                 "sample": str(sample_name),
                 "n_replicates": n_reps,
@@ -297,7 +370,6 @@ def main(argv=None):
                 "n_replicates_above_upper": n_above,
             })
 
-        total_reps = int(raw_sample_df.shape[0])
         total_below = sum(s["n_replicates_below_lower"] for s in per_sample_stats)
         total_above = sum(s["n_replicates_above_upper"] for s in per_sample_stats)
         total_oor = total_below + total_above
@@ -305,9 +377,10 @@ def main(argv=None):
         high_bound = max(params["y_min"], params["y_max"])
 
         summary["samples"] = {
+            "include_out_of_range": include_oor,
             "n_samples": len(sample_df),
-            "n_replicates_total": total_reps,
-            "n_estimated_successfully": total_reps - total_oor,
+            "n_replicates_total": n_total_reps,
+            "n_estimated_successfully": n_total_reps - total_oor,
             "n_out_of_range": total_oor,
             "n_below_lower_bound": total_below,
             "n_above_upper_bound": total_above,
