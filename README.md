@@ -177,6 +177,7 @@ If you are not familiar with TSV files, you can easily create them from Microsof
 | `sample_estimates.pdf` | Sample estimates plot (PDF) |
 | `sample_estimates.png` | Sample estimates plot (PNG) |
 | `report.html` | Self-contained HTML report with interactive plots |
+| `summary.json` | Machine-readable run summary (version, timestamp, fit parameters, out-of-range statistics) |
 
 ### Interactive HTML Report
 
@@ -195,6 +196,7 @@ See an example report: [example/output/report.html](https://raw.githack.com/Naot
 
 | Option | Description |
 |--------|-------------|
+| `-v`, `--version` | Show version and exit |
 | `-i`, `--input` | Path to standard curve TSV (required) |
 | `-s`, `--sample` | Path to sample TSV (optional) |
 | `-o`, `--output` | Output directory (required) |
@@ -205,6 +207,7 @@ See an example report: [example/output/report.html](https://raw.githack.com/Naot
 | `--hill` | Hill coefficient: number to fix, or `fit` to estimate |
 | `--dpi` | PNG resolution (default: 300) |
 | `--verbose` | Enable verbose (DEBUG-level) logging output |
+| `--include-out-of-range` | Include out-of-range replicates in sample mean/SD calculation (default: excluded) |
 
 ## Available Presets
 
