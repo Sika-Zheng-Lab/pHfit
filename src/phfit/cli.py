@@ -410,6 +410,7 @@ def main(argv=None):
         sample_df=sample_result_df,
         preset_name=preset_name,
         version=__version__,
+        include_out_of_range=args.include_out_of_range if args.sample else False,
     )
     logger.info("HTML report saved: %s", report_path)
 

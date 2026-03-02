@@ -181,6 +181,7 @@ HTML_TEMPLATE = """\
 
 SAMPLE_SECTION_TEMPLATE = """\
 <h2>Sample pH Estimates</h2>
+{oor_notice}
 <div class="card">
   <div class="plot-container">
     {sample_plot}
@@ -435,6 +436,7 @@ def generate_report(
     sample_df=None,
     preset_name: str | None = None,
     version: str = "0.1.0",
+    include_out_of_range: bool = False,
 ) -> str:
     """
     Generate a self-contained HTML report with interactive Plotly charts.
@@ -453,6 +455,8 @@ def generate_report(
         Name of the preset used, if any.
     version : str
         Package version string.
+    include_out_of_range : bool
+        Whether out-of-range replicates were included in mean/SD calculation.
 
     Returns
     -------
@@ -487,9 +491,37 @@ def generate_report(
         display_sample.columns = ["Sample", "Mean", "SD", "N", "Estimated pH"]
         sample_table = _df_to_html_table(display_sample)
 
+        # Build out-of-range notice
+        low = min(params["y_min"], params["y_max"])
+        high = max(params["y_min"], params["y_max"])
+        if include_out_of_range:
+            oor_notice = (
+                '<div class="card" style="border-left: 4px solid #d97706; background: #fffbeb;">'
+                '<strong style="color: #d97706;">\u26A0 Note:</strong> '
+                "Mean and SD values were calculated using <strong>all replicates</strong>, "
+                "including those with signal values outside the estimable range "
+                f'({low:.2f} &ndash; {high:.2f}). '
+                "To exclude out-of-range replicates, run without "
+                "<code>--include-out-of-range</code>."
+                "</div>"
+            )
+        else:
+            oor_notice = (
+                '<div class="card" style="border-left: 4px solid var(--primary); background: #eff6ff;">'
+                '<strong style="color: var(--primary);">\u2139 Note:</strong> '
+                "Mean and SD values were calculated <strong>excluding</strong> replicates "
+                "with signal values outside the estimable range "
+                f'({low:.2f} &ndash; {high:.2f}). '
+                "N reflects the number of in-range replicates used. "
+                "To include all replicates, use "
+                "<code>--include-out-of-range</code>."
+                "</div>"
+            )
+
         sample_section = SAMPLE_SECTION_TEMPLATE.format(
             sample_plot=sample_plot,
             sample_table=sample_table,
+            oor_notice=oor_notice,
         )
 
     # Render HTML
