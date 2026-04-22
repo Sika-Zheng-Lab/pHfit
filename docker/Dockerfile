@@ -1,6 +1,6 @@
 ##################################################################
 # Dockerfile for pHfit
-# Based on python 3.9-bookworm
+# Based on python 3.12-bookworm
 ##################################################################
 
 FROM python:3.12-bookworm

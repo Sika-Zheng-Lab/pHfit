@@ -4,27 +4,29 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pHfit"
-version = "0.1.0"
+version = "1.0.0"
 description = "Estimate intracellular pH from fluorescent indicator data using bidirectional sigmoid curve fitting"
 readme = "README.md"
 license = "MIT"
-requires-python = ">=3.9,<3.15"
+requires-python = ">=3.10,<3.15"
 authors = [
     { name = "Naoto Kubota" },
+    { name = "Sika Zheng" },
 ]
 keywords = ["pH", "lysosome", "fluorescence", "sigmoid", "curve-fitting"]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Science/Research",
     "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
     "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Topic :: Scientific/Engineering :: Chemistry",
 ]
 dependencies = [
     "numpy>=1.20",
@@ -47,6 +49,27 @@ phfit = "phfit.cli:main"
 Homepage = "https://github.com/NaotoKubota/pHfit"
 Repository = "https://github.com/NaotoKubota/pHfit"
 Issues = "https://github.com/NaotoKubota/pHfit/issues"
+Changelog = "https://github.com/NaotoKubota/pHfit/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/phfit"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/",
+    "tests/",
+    "example/standard_curve.tsv",
+    "example/sample.tsv",
+    "example/phrodo_standard_curve.tsv",
+    "example/phrodo_sample.tsv",
+    "img/",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "CITATION.cff",
+    "pyproject.toml",
+]
+exclude = [
+    "example/output/",
+    "example/phrodo_output/",
+]

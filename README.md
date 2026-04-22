@@ -237,9 +237,15 @@ Some pH indicators (e.g., BCECF, SNARF-1, HPTS, LysoSensor Yellow/Blue) are meas
 
 MIT License
 
+## Citation
+
+If you use pHfit in your research, please cite it. Citation metadata is provided in [CITATION.cff](CITATION.cff). A Zenodo DOI for each released version is available from the [GitHub Releases page](https://github.com/NaotoKubota/pHfit/releases).
+
+<!-- DOI badge will be added here after the first Zenodo release. -->
+
 ## Contributing
 
-Thank you for wanting to improve pHfit! If you have any bugs or questions, feel free to [open an issue](https://github.com/NaotoKubota/pHfit/issues) or pull request.
+Thank you for wanting to improve pHfit! If you have any bugs or questions, feel free to [open an issue](https://github.com/NaotoKubota/pHfit/issues) or pull request. See [CONTRIBUTING.md](CONTRIBUTING.md) for development workflow and release process.
 
 ## Authors
 
