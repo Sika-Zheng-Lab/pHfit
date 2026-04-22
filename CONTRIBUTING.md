@@ -5,7 +5,7 @@ Thank you for your interest in contributing to pHfit!
 ## Development setup
 
 ```bash
-git clone https://github.com/NaotoKubota/pHfit.git
+git clone https://github.com/Sika-Zheng-Lab/pHfit.git
 cd pHfit
 pip install -e ".[dev]"
 ```
@@ -46,4 +46,4 @@ Releases are automated by GitHub Actions and are triggered by **merging a pull r
 
 ## Reporting issues
 
-Please use the [issue templates](https://github.com/NaotoKubota/pHfit/issues/new/choose) for bug reports, feature requests, and questions. For security issues, see [SECURITY.md](SECURITY.md).
+Please use the [issue templates](https://github.com/Sika-Zheng-Lab/pHfit/issues/new/choose) for bug reports, feature requests, and questions. For security issues, see [SECURITY.md](SECURITY.md).

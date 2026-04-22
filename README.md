@@ -1,12 +1,12 @@
 # pHfit
 
-[![GitHub License](https://img.shields.io/github/license/NaotoKubota/pHfit)](https://github.com/NaotoKubota/pHfit/blob/main/LICENSE)
-[![GitHub Release](https://img.shields.io/github/v/release/NaotoKubota/pHfit?style=flat)](https://github.com/NaotoKubota/pHfit/releases)
-[![GitHub Release Date](https://img.shields.io/github/release-date/NaotoKubota/pHfit)](https://github.com/NaotoKubota/pHfit/releases)
-[![Tests](https://github.com/NaotoKubota/pHfit/actions/workflows/test.yml/badge.svg)](https://github.com/NaotoKubota/pHfit/actions/workflows/test.yml)
-[![codecov](https://codecov.io/gh/NaotoKubota/pHfit/branch/main/graph/badge.svg)](https://codecov.io/gh/NaotoKubota/pHfit)
-[![Create Release](https://github.com/NaotoKubota/pHfit/actions/workflows/release.yml/badge.svg)](https://github.com/NaotoKubota/pHfit/actions/workflows/release.yml)
-[![Publish PyPI](https://github.com/NaotoKubota/pHfit/actions/workflows/publish.yml/badge.svg)](https://github.com/NaotoKubota/pHfit/actions/workflows/publish.yml)
+[![GitHub License](https://img.shields.io/github/license/Sika-Zheng-Lab/pHfit)](https://github.com/Sika-Zheng-Lab/pHfit/blob/main/LICENSE)
+[![GitHub Release](https://img.shields.io/github/v/release/Sika-Zheng-Lab/pHfit?style=flat)](https://github.com/Sika-Zheng-Lab/pHfit/releases)
+[![GitHub Release Date](https://img.shields.io/github/release-date/Sika-Zheng-Lab/pHfit)](https://github.com/Sika-Zheng-Lab/pHfit/releases)
+[![Tests](https://github.com/Sika-Zheng-Lab/pHfit/actions/workflows/test.yml/badge.svg)](https://github.com/Sika-Zheng-Lab/pHfit/actions/workflows/test.yml)
+[![codecov](https://codecov.io/gh/Sika-Zheng-Lab/pHfit/branch/main/graph/badge.svg)](https://codecov.io/gh/Sika-Zheng-Lab/pHfit)
+[![Create Release](https://github.com/Sika-Zheng-Lab/pHfit/actions/workflows/release.yml/badge.svg)](https://github.com/Sika-Zheng-Lab/pHfit/actions/workflows/release.yml)
+[![Publish PyPI](https://github.com/Sika-Zheng-Lab/pHfit/actions/workflows/publish.yml/badge.svg)](https://github.com/Sika-Zheng-Lab/pHfit/actions/workflows/publish.yml)
 [![Python](https://img.shields.io/pypi/pyversions/pHfit.svg?label=Python&color=blue)](https://pypi.org/project/pHfit/)
 [![PyPI](https://img.shields.io/pypi/v/pHfit.svg?label=PyPI&color=orange)](https://pypi.org/project/pHfit/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/pHfit.svg?label=PyPI%20-%20Downloads&color=orange)](https://pypi.org/project/pHfit/)
@@ -48,7 +48,7 @@ pip install pHfit
 For development:
 
 ```bash
-git clone https://github.com/NaotoKubota/pHfit.git
+git clone https://github.com/Sika-Zheng-Lab/pHfit.git
 cd pHfit
 pip install -e ".[dev]"
 ```
@@ -190,7 +190,7 @@ If you are not familiar with TSV files, you can easily create them from Microsof
 
 No internet connection is required after generating the report — all Plotly assets are loaded via CDN at generation time and the chart data is embedded inline.
 
-See an example report: [example/output/report.html](https://raw.githack.com/NaotoKubota/pHfit/main/example/output/report.html)
+See an example report: [example/output/report.html](https://raw.githack.com/Sika-Zheng-Lab/pHfit/main/example/output/report.html)
 
 ## CLI Options
 
@@ -239,13 +239,13 @@ MIT License
 
 ## Citation
 
-If you use pHfit in your research, please cite it. Citation metadata is provided in [CITATION.cff](CITATION.cff). A Zenodo DOI for each released version is available from the [GitHub Releases page](https://github.com/NaotoKubota/pHfit/releases).
+If you use pHfit in your research, please cite it. Citation metadata is provided in [CITATION.cff](CITATION.cff). A Zenodo DOI for each released version is available from the [GitHub Releases page](https://github.com/Sika-Zheng-Lab/pHfit/releases).
 
 <!-- DOI badge will be added here after the first Zenodo release. -->
 
 ## Contributing
 
-Thank you for wanting to improve pHfit! If you have any bugs or questions, feel free to [open an issue](https://github.com/NaotoKubota/pHfit/issues) or pull request. See [CONTRIBUTING.md](CONTRIBUTING.md) for development workflow and release process.
+Thank you for wanting to improve pHfit! If you have any bugs or questions, feel free to [open an issue](https://github.com/Sika-Zheng-Lab/pHfit/issues) or pull request. See [CONTRIBUTING.md](CONTRIBUTING.md) for development workflow and release process.
 
 ## Authors
 

@@ -46,10 +46,10 @@ dev = [
 phfit = "phfit.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/NaotoKubota/pHfit"
-Repository = "https://github.com/NaotoKubota/pHfit"
-Issues = "https://github.com/NaotoKubota/pHfit/issues"
-Changelog = "https://github.com/NaotoKubota/pHfit/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/Sika-Zheng-Lab/pHfit"
+Repository = "https://github.com/Sika-Zheng-Lab/pHfit"
+Issues = "https://github.com/Sika-Zheng-Lab/pHfit/issues"
+Changelog = "https://github.com/Sika-Zheng-Lab/pHfit/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/phfit"]
