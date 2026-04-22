@@ -8,6 +8,14 @@ type: software
 version: 1.0.0
 date-released: 2026-04-21
 license: MIT
+doi: 10.5281/zenodo.19687851
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.19687851
+    description: Zenodo concept DOI (all versions)
+  - type: doi
+    value: 10.5281/zenodo.19687852
+    description: Zenodo version DOI (v1.0.0)
 repository-code: "https://github.com/Sika-Zheng-Lab/pHfit"
 url: "https://github.com/Sika-Zheng-Lab/pHfit"
 keywords:

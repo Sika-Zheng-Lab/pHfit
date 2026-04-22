@@ -13,6 +13,7 @@
 [![Docker](https://img.shields.io/docker/v/naotokubota/pHfit?color=blue&label=Docker)](https://hub.docker.com/r/naotokubota/pHfit)
 [![Docker Pulls](https://img.shields.io/docker/pulls/naotokubota/pHfit)](https://hub.docker.com/r/naotokubota/pHfit)
 [![Docker Image Size](https://img.shields.io/docker/image-size/naotokubota/pHfit)](https://hub.docker.com/r/naotokubota/pHfit)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19687851.svg)](https://doi.org/10.5281/zenodo.19687851)
 
 Estimate intracellular pH from fluorescent indicator data using bidirectional sigmoid curve fitting.
 
@@ -239,9 +240,13 @@ MIT License
 
 ## Citation
 
-If you use pHfit in your research, please cite it. Citation metadata is provided in [CITATION.cff](CITATION.cff). A Zenodo DOI for each released version is available from the [GitHub Releases page](https://github.com/Sika-Zheng-Lab/pHfit/releases).
+If you use pHfit in your research, please cite it via its Zenodo DOI:
 
-<!-- DOI badge will be added here after the first Zenodo release. -->
+> Kubota, N., & Zheng, S. (2026). *pHfit*. Zenodo. https://doi.org/10.5281/zenodo.19687851
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19687851.svg)](https://doi.org/10.5281/zenodo.19687851)
+
+The DOI above is the *concept DOI* and always resolves to the latest version. A per-version DOI is also minted automatically for each [GitHub Release](https://github.com/Sika-Zheng-Lab/pHfit/releases). Machine-readable citation metadata is provided in [CITATION.cff](CITATION.cff).
 
 ## Contributing
 
