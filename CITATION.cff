@@ -1,0 +1,25 @@
+cff-version: 1.2.0
+message: "If you use pHfit in your research, please cite it as below."
+title: pHfit
+abstract: >-
+  Estimate intracellular pH from fluorescent indicator data using
+  bidirectional sigmoid (Henderson-Hasselbalch) curve fitting.
+type: software
+version: 1.0.0
+date-released: 2026-04-21
+license: MIT
+repository-code: "https://github.com/Sika-Zheng-Lab/pHfit"
+url: "https://github.com/Sika-Zheng-Lab/pHfit"
+keywords:
+  - pH
+  - lysosome
+  - fluorescence
+  - sigmoid
+  - curve-fitting
+authors:
+  - family-names: Kubota
+    given-names: Naoto
+    orcid: "https://orcid.org/0000-0003-0612-2300"
+  - family-names: Zheng
+    given-names: Sika
+    orcid: "https://orcid.org/0000-0002-0573-4981"
